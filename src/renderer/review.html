@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self'; script-src 'self'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Review — Flashcards Progression</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <div class="breadcrumb">
+        <a id="back-link" href="home.html">Back</a> / Review
+      </div>
+
+      <section id="session" class="review-shell" hidden>
+        <p class="muted" id="progress"></p>
+        <div class="flashcard" id="flashcard" tabindex="0">
+          <div>
+            <span class="label" id="side-label">Front</span>
+            <div id="card-text"></div>
+          </div>
+        </div>
+        <div class="review-actions">
+          <button class="btn" id="flip-btn" type="button">Flip</button>
+          <button class="btn btn-danger" id="incorrect-btn" type="button" hidden>
+            Incorrect ←
+          </button>
+          <button class="btn btn-primary" id="correct-btn" type="button" hidden>
+            Correct →
+          </button>
+        </div>
+        <p class="hint">Space: flip · ← incorrect · → correct</p>
+      </section>
+
+      <section id="summary" class="review-shell" hidden>
+        <h1>Session complete</h1>
+        <div class="summary-grid" id="summary-grid"></div>
+        <button class="btn btn-primary" id="done-btn" type="button">Done</button>
+      </section>
+
+      <section id="empty-review" class="empty-state" hidden>
+        <h2>Nothing due</h2>
+        <p>There are no active cards due for this review scope.</p>
+        <button class="btn" id="empty-back-btn" type="button">Go back</button>
+      </section>
+
+      <div id="error" class="error" hidden></div>
+    </div>
+    <script src="nav.js"></script>
+    <script src="review.js"></script>
+  </body>
+</html>

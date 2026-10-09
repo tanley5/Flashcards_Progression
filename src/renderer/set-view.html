@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self'; script-src 'self'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Set — Flashcards Progression</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <div class="breadcrumb"><a href="home.html">Home</a> / Set</div>
+      <header class="topbar">
+        <h1 id="set-title">Set</h1>
+        <div class="topbar-actions">
+          <button class="btn btn-primary" id="review-due-btn" type="button">
+            Review Due
+          </button>
+        </div>
+      </header>
+      <p class="muted" id="set-status"></p>
+      <div class="deck-grid" id="deck-grid"></div>
+      <div id="error" class="error" hidden></div>
+    </div>
+    <script src="nav.js"></script>
+    <script src="set-view.js"></script>
+  </body>
+</html>

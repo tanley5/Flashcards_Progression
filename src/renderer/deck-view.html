@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self'; script-src 'self'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deck — Flashcards Progression</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <div class="breadcrumb">
+        <a href="home.html">Home</a> /
+        <a id="set-link" href="#">Set</a> / Deck
+      </div>
+      <header class="topbar">
+        <h1 id="deck-title">Deck</h1>
+        <div class="topbar-actions">
+          <button class="btn btn-primary" id="review-due-btn" type="button">
+            Review Due
+          </button>
+          <button class="btn" id="add-card-btn" type="button">Add Card</button>
+          <button class="btn" id="bulk-add-btn" type="button">Bulk Add</button>
+        </div>
+      </header>
+      <p class="muted" id="deck-hint"></p>
+      <div id="error" class="error" hidden></div>
+      <div id="card-list" class="list"></div>
+      <div id="empty" class="empty-state" hidden>
+        <p>No cards in this deck yet.</p>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="card-modal" hidden>
+      <div class="modal" role="dialog">
+        <h2 id="card-modal-title">Add Card</h2>
+        <label class="muted" for="card-front">Front</label>
+        <textarea id="card-front" rows="3"></textarea>
+        <label class="muted" for="card-back">Back</label>
+        <textarea id="card-back" rows="3"></textarea>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" type="button" data-close="card-modal">Cancel</button>
+          <button class="btn btn-primary" id="card-save" type="button">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="bulk-modal" hidden>
+      <div class="modal" role="dialog">
+        <h2>Bulk Add</h2>
+        <p>One card per line: <code>front | back</code></p>
+        <textarea id="bulk-text" placeholder="capital of France | Paris"></textarea>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" type="button" data-close="bulk-modal">Cancel</button>
+          <button class="btn btn-primary" id="bulk-save" type="button">Import</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="nav.js"></script>
+    <script src="deck-view.js"></script>
+  </body>
+</html>

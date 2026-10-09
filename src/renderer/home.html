@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self'; script-src 'self'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flashcards Progression</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <h1>Flashcards Progression</h1>
+        <div class="topbar-actions">
+          <button class="btn btn-primary" id="review-all-btn" type="button">
+            Review All Due
+          </button>
+          <button class="btn" id="new-set-btn" type="button">+ New Set</button>
+        </div>
+      </header>
+
+      <div id="error" class="error" hidden></div>
+      <div id="set-list" class="list"></div>
+      <div id="empty" class="empty-state" hidden>
+        <p>No sets yet. Create a set to start adding cards in Deck 1.</p>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="new-set-modal" hidden>
+      <div class="modal" role="dialog" aria-labelledby="new-set-title">
+        <h2 id="new-set-title">New Set</h2>
+        <p>Name your set. Three review decks will be created automatically.</p>
+        <input id="new-set-name" type="text" placeholder="Set name" maxlength="120" />
+        <div class="modal-actions">
+          <button class="btn btn-ghost" type="button" data-close="new-set-modal">
+            Cancel
+          </button>
+          <button class="btn btn-primary" id="create-set-confirm" type="button">
+            Create
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="rename-modal" hidden>
+      <div class="modal" role="dialog" aria-labelledby="rename-title">
+        <h2 id="rename-title">Rename Set</h2>
+        <input id="rename-input" type="text" maxlength="120" />
+        <div class="modal-actions">
+          <button class="btn btn-ghost" type="button" data-close="rename-modal">
+            Cancel
+          </button>
+          <button class="btn btn-primary" id="rename-confirm" type="button">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="restart-modal" hidden>
+      <div class="modal" role="dialog" aria-labelledby="restart-title">
+        <h2 id="restart-title">Restart this set?</h2>
+        <p>
+          All cards will become active again and move to the starting deck you choose.
+        </p>
+        <div class="deck-picker">
+          <button class="btn btn-primary" type="button" data-restart-deck="1">
+            Deck 1
+          </button>
+          <button class="btn" type="button" data-restart-deck="2">Deck 2</button>
+          <button class="btn" type="button" data-restart-deck="3">Deck 3</button>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" type="button" data-close="restart-modal">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="nav.js"></script>
+    <script src="home.js"></script>
+  </body>
+</html>

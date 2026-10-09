@@ -1,0 +1,34 @@
+CREATE TABLE IF NOT EXISTS sets (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    created_date TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS decks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    set_id INTEGER NOT NULL REFERENCES sets(id) ON DELETE CASCADE,
+    deck_number INTEGER NOT NULL,
+    interval_days INTEGER NOT NULL,
+    created_date TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS cards (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    set_id INTEGER NOT NULL REFERENCES sets(id) ON DELETE CASCADE,
+    current_deck_id INTEGER NOT NULL REFERENCES decks(id),
+    front TEXT NOT NULL,
+    back TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'active',
+    last_reviewed_date TEXT,
+    next_due_date TEXT NOT NULL,
+    created_date TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS review_log (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    card_id INTEGER NOT NULL REFERENCES cards(id) ON DELETE CASCADE,
+    date TEXT NOT NULL,
+    was_correct INTEGER NOT NULL,
+    deck_before INTEGER NOT NULL,
+    deck_after INTEGER NOT NULL
+);

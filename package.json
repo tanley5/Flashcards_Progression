@@ -1,0 +1,97 @@
+{
+  "name": "flashcards-progression",
+  "version": "1.0.0",
+  "description": "Desktop flashcard app with a 3-deck graduated review system",
+  "main": "src/main/main.js",
+  "scripts": {
+    "rebuild:node": "node scripts/rebuild-native.js node",
+    "rebuild:electron": "node scripts/rebuild-native.js electron",
+    "postinstall": "npm run rebuild:node",
+    "prestart": "npm run rebuild:electron",
+    "start": "electron .",
+    "pretest": "npm run rebuild:node",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "prepack": "npm run rebuild:electron",
+    "pack": "electron-builder --dir",
+    "predist": "npm run rebuild:electron",
+    "dist": "electron-builder",
+    "predist:mac": "npm run rebuild:electron",
+    "dist:mac": "electron-builder --mac dmg",
+    "dist:win": "electron-builder --win nsis",
+    "dist:linux": "electron-builder --linux AppImage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tanley5/Flashcards_Progression.git"
+  },
+  "author": "tanley5",
+  "license": "MIT",
+  "devDependencies": {
+    "@electron/rebuild": "^3.7.1",
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8",
+    "jest": "^29.7.0"
+  },
+  "dependencies": {
+    "better-sqlite3": "12.11.1"
+  },
+  "build": {
+    "appId": "com.tanley5.flashcardsprogression",
+    "productName": "Flashcards Progression",
+    "copyright": "Copyright © tanley5",
+    "directories": {
+      "output": "dist"
+    },
+    "beforePack": "scripts/before-pack.js",
+    "npmRebuild": false,
+    "files": [
+      "src/**/*",
+      "schema.sql",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "**/*.node",
+      "**/better-sqlite3/build/Release/**"
+    ],
+    "mac": {
+      "category": "public.app-category.education",
+      "target": [
+        "dmg"
+      ],
+      "identity": null,
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false
+    },
+    "dmg": {
+      "title": "Flashcards Progression",
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Education"
+    }
+  }
+}
