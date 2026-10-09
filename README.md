@@ -12,6 +12,8 @@ Desktop flashcard app with a 3-deck graduated review system (modified Leitner).
 
 Correct answers promote a card; a correct answer in Deck 3 marks it mastered. Incorrect answers demote one deck (floor at Deck 1).
 
+When you start a review (deck, set, or all due), the due-card queue is **shuffled** so cards do not always appear in the same order.
+
 ## Stack
 
 - Electron

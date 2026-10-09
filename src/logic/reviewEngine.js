@@ -89,10 +89,21 @@ function reviewCard(db, cardId, wasCorrect) {
   };
 }
 
-function getDueCards(db, { scope, setId, deckId } = {}) {
+function shuffleCards(cards, random = Math.random) {
+  const shuffled = cards.slice();
+  for (let i = shuffled.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+function getDueCards(db, { scope, setId, deckId, shuffle = true, random } = {}) {
+  let cards;
+
   if (scope === 'deck') {
     if (!deckId) throw new Error('deckId is required for deck scope');
-    return db
+    cards = db
       .prepare(
         `
         SELECT * FROM cards
@@ -103,11 +114,9 @@ function getDueCards(db, { scope, setId, deckId } = {}) {
       `
       )
       .all(deckId);
-  }
-
-  if (scope === 'set') {
+  } else if (scope === 'set') {
     if (!setId) throw new Error('setId is required for set scope');
-    return db
+    cards = db
       .prepare(
         `
         SELECT * FROM cards
@@ -120,10 +129,8 @@ function getDueCards(db, { scope, setId, deckId } = {}) {
       `
       )
       .all(setId);
-  }
-
-  if (scope === 'global' || !scope) {
-    return db
+  } else if (scope === 'global' || !scope) {
+    cards = db
       .prepare(
         `
         SELECT * FROM cards
@@ -136,9 +143,11 @@ function getDueCards(db, { scope, setId, deckId } = {}) {
       `
       )
       .all();
+  } else {
+    throw new Error(`Unknown review scope: ${scope}`);
   }
 
-  throw new Error(`Unknown review scope: ${scope}`);
+  return shuffle ? shuffleCards(cards, random) : cards;
 }
 
 module.exports = {
@@ -147,4 +156,5 @@ module.exports = {
   reviewCard,
   updateCardDueDate,
   getDueCards,
+  shuffleCards,
 };

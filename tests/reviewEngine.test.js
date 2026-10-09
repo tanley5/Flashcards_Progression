@@ -1,7 +1,7 @@
 const { createTestDb } = require('./helpers/testDb');
 const { createSet, getDeckIdByNumber, listDecks } = require('../src/logic/sets');
 const { createCard } = require('../src/logic/cards');
-const { reviewCard, getDueCards } = require('../src/logic/reviewEngine');
+const { reviewCard, getDueCards, shuffleCards } = require('../src/logic/reviewEngine');
 const { today, addDays } = require('../src/logic/dates');
 const { INTERVAL_BY_DECK_NUMBER } = require('../src/logic/constants');
 
@@ -82,13 +82,13 @@ describe('reviewEngine', () => {
     // a2 and b1 still due in deck 1
 
     const deck1 = getDeckIdByNumber(db, setId, 1);
-    const deckDue = getDueCards(db, { scope: 'deck', deckId: deck1 });
+    const deckDue = getDueCards(db, { scope: 'deck', deckId: deck1, shuffle: false });
     expect(deckDue.map((c) => c.id)).toEqual([a2]);
 
-    const setDue = getDueCards(db, { scope: 'set', setId });
+    const setDue = getDueCards(db, { scope: 'set', setId, shuffle: false });
     expect(setDue.map((c) => c.id)).toEqual([a2]);
 
-    const globalDue = getDueCards(db, { scope: 'global' });
+    const globalDue = getDueCards(db, { scope: 'global', shuffle: false });
     expect(globalDue.map((c) => c.id).sort()).toEqual([a2, b1].sort());
 
     // Future-due and mastered excluded
@@ -103,17 +103,52 @@ describe('reviewEngine', () => {
     expect(getDueCards(db, { scope: 'set', setId })).toHaveLength(0);
   });
 
-  test('set-scoped due orders by deck number', () => {
+  test('set-scoped due orders by deck number when shuffle is off', () => {
     const c1 = createCard(db, { setId, front: 'd1', back: 'x' });
     const c2 = createCard(db, { setId, front: 'd2', back: 'x' });
     reviewCard(db, c2, true); // c2 -> deck 2
     makeDue(db, c2);
 
-    const due = getDueCards(db, { scope: 'set', setId });
+    const due = getDueCards(db, { scope: 'set', setId, shuffle: false });
     expect(due.map((c) => c.id)).toEqual([c1, c2]);
 
     const decks = listDecks(db, setId);
     expect(due[0].current_deck_id).toBe(decks[0].id);
     expect(due[1].current_deck_id).toBe(decks[1].id);
+  });
+
+  test('review due queue is shuffled by default', () => {
+    const ids = [];
+    for (let i = 0; i < 8; i += 1) {
+      ids.push(createCard(db, { setId, front: `q${i}`, back: `a${i}` }));
+    }
+
+    const deck1 = getDeckIdByNumber(db, setId, 1);
+    // Deterministic Fisher-Yates: always pick j = 0 so order reverses stepwise
+    let call = 0;
+    const random = () => {
+      call += 1;
+      return 0;
+    };
+
+    const due = getDueCards(db, {
+      scope: 'deck',
+      deckId: deck1,
+      shuffle: true,
+      random,
+    });
+
+    expect(due.map((c) => c.id)).not.toEqual(ids);
+    expect(due.map((c) => c.id).sort()).toEqual([...ids].sort());
+    expect(call).toBeGreaterThan(0);
+  });
+
+  test('shuffleCards uses Fisher-Yates with provided random', () => {
+    const input = [1, 2, 3, 4];
+    // Always choose j = 0 → rotates toward reverse: [4,1,2,3] after full pass? 
+    // i=3,j=0 -> [4,2,3,1]; i=2,j=0 -> [3,2,4,1]; i=1,j=0 -> [2,3,4,1]
+    const shuffled = shuffleCards(input, () => 0);
+    expect(shuffled).toEqual([2, 3, 4, 1]);
+    expect(input).toEqual([1, 2, 3, 4]);
   });
 });
