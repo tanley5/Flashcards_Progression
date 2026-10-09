@@ -26,7 +26,7 @@ describe('sets', () => {
     }
   });
 
-  test('createSet inserts set and three decks with intervals 1/3/3', () => {
+  test('createSet inserts set and three decks with intervals 1/2/3', () => {
     const setId = createSet(db, 'Anatomy');
     const decks = listDecks(db, setId);
 
@@ -37,6 +37,7 @@ describe('sets', () => {
       INTERVAL_BY_DECK_NUMBER[2],
       INTERVAL_BY_DECK_NUMBER[3],
     ]);
+    expect(INTERVAL_BY_DECK_NUMBER[2]).toBe(2);
     expect(INTERVAL_BY_DECK_NUMBER[3]).toBe(3);
   });
 

@@ -7,7 +7,7 @@ Desktop flashcard app with a 3-deck graduated review system (modified Leitner).
 | Deck | Interval |
 |------|----------|
 | 1    | every 1 day |
-| 2    | every 3 days |
+| 2    | every 2 days |
 | 3    | every 3 days |
 
 Correct answers promote a card; a correct answer in Deck 3 marks it mastered. Incorrect answers demote one deck (floor at Deck 1).

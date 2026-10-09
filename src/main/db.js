@@ -1,6 +1,17 @@
 const fs = require('fs');
 const path = require('path');
 const Database = require('better-sqlite3');
+const { INTERVAL_BY_DECK_NUMBER } = require('../logic/constants');
+
+function syncDeckIntervals(db) {
+  const update = db.prepare(
+    'UPDATE decks SET interval_days = ? WHERE deck_number = ? AND interval_days != ?'
+  );
+  for (const [deckNumber, intervalDays] of Object.entries(INTERVAL_BY_DECK_NUMBER)) {
+    const n = Number(deckNumber);
+    update.run(intervalDays, n, intervalDays);
+  }
+}
 
 function openDatabase(dbPath = ':memory:') {
   const db = new Database(dbPath);
@@ -8,6 +19,7 @@ function openDatabase(dbPath = ':memory:') {
   const schemaPath = path.join(__dirname, '..', '..', 'schema.sql');
   const schema = fs.readFileSync(schemaPath, 'utf8');
   db.exec(schema);
+  syncDeckIntervals(db);
   return db;
 }
 

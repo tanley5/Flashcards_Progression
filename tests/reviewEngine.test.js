@@ -37,6 +37,7 @@ describe('reviewEngine', () => {
     result = reviewCard(db, cardId, true);
     expect(result.deckAfter).toBe(3);
     expect(result.card.next_due_date).toBe(addDays(today(), INTERVAL_BY_DECK_NUMBER[3]));
+    expect(INTERVAL_BY_DECK_NUMBER[2]).toBe(2);
     expect(INTERVAL_BY_DECK_NUMBER[3]).toBe(3);
 
     makeDue(db, cardId);
